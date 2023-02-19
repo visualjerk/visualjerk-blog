@@ -1,16 +1,22 @@
 {
   "name": "visualjerk-blog",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Writing about frontend development with a focus on Vue and DX.",
   "scripts": {
     "dev": "vitepress dev articles",
     "build": "vitepress build articles",
     "preview": "vitepress preview articles"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "vue",
+    "vuejs",
+    "js",
+    "javascript",
+    "ts",
+    "typescript",
+    "dx",
+    "developer experience"
+  ],
+  "author": "Jörg Bayreuther",
   "devDependencies": {
     "vitepress": "1.0.0-alpha.46",
     "vue": "^3.2.47"
