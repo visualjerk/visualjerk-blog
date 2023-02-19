@@ -1,6 +1,7 @@
 {
   "name": "visualjerk-blog",
   "description": "Writing about frontend development with a focus on Vue and DX.",
+  "author": "Jörg Bayreuther",
   "scripts": {
     "dev": "vitepress dev articles",
     "build": "vitepress build articles",
@@ -16,7 +17,6 @@
     "dx",
     "developer experience"
   ],
-  "author": "Jörg Bayreuther",
   "devDependencies": {
     "@algolia/client-search": "4.14.3",
     "@mermaid-js/mermaid-mindmap": "9.3.0",

@@ -98,9 +98,27 @@ flowchart TB
   C -- renders --> D3(DialogBaz)
 ```
 
-## Creating the Dialog Component
+## Creating the Dialog Provider
 
-## Creating the Dialog API
+Based on the above architecture, our **dialog provider** is hardly more than a subscription service for dialogs. For the sake of breavity, we use `EventTarget` to implement it:
+
+::: code-group
+
+```ts [dialogs/dialog-provider.ts]
+const DIALOG_OPEN_EVENT = 'DIALOG_OPEN_EVENT'
+
+class DialogProvider extends EventTarget {
+  open(kind: string, context: Record<string, unknown>) {
+    this.dispatchEvent(new CustomEvent(DIALOG_OPEN_EVENT, {
+      details: context
+    }))
+  }
+}
+```
+
+:::
+
+## Creating the Dialog Component
 
 ## Improving Developer Experience with Typesafety
 
@@ -114,6 +132,8 @@ flowchart TB
   P -- registers --> D2(DialogBar)
   P -- registers --> D3(DialogBaz)
 ```
+
+## Handling Errors
 
 ## Further Reading
 
