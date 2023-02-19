@@ -139,14 +139,63 @@ export const dialogProvider = {
 }
 ```
 
+:::
+
 On the surface the `dialogProvider` provides two methods:
 
 - `open` this will be used inside our views to open a new dialog
 - `subscribe` this will be used inside our `DialogWrapper` to get notified about opening a new dialog
 
+## Creating the Dialog Wrapper
+
+Now we create the `DialogWrapper` which is responsible for rendering dialogs, whenever it gets notified by the `dialogProvider`.
+
+::: code-group
+
+```vue [dialogs/dialog-wrapper.vue]
+<template>
+  <component
+    v-if="dialogComponent"
+    :is="dialogComponent"
+    v-bind="dialogBindings"
+  />
+</template>
+
+<script setup lang="ts">
+import { onBeforeUnmount, ref, markRaw } from 'vue'
+import { dialogProvider } from './dialog-provider'
+import { DIALOG_COMPONENTS } from './components'
+
+const dialogComponent = ref()
+const dialogBindings = ref()
+
+function onClose() {
+  dialogComponent.value = null
+  dialogBindings.value = null
+}
+
+const unsubscribe = dialogProvider.subscribe(({ kind, context }) => {
+  dialogComponent.value = markRaw(DIALOG_COMPONENTS[kind])
+  dialogBindings.value = {
+    ...context,
+    onClose,
+  }
+})
+onBeforeUnmount(unsubscribe)
+</script>
+```
+
+```ts [dialogs/components/index.ts]
+import type { Component } from 'vue'
+
+export const DIALOG_COMPONENTS: Record<string, Component> = {}
+```
+
 :::
 
-## Creating the Dialog Wrapper
+This component is pretty straightforward. It utilizes Vue's `component` to render a dialog component of a certain `kind`. It also binds the provided context alongside an `onClose` handler to the dialog component.
+
+Note that we import a record of `DIALOG_COMPONENTS`, which is an empty object for now. This is the place where we will add the actual dialog components.
 
 ## Adding Dialog Components
 

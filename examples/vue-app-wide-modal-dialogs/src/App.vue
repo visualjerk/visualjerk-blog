@@ -3,7 +3,9 @@ import AppButton from './components/app-button.vue'
 import { DialogWrapper, dialogProvider } from './dialogs'
 
 function handleDelete() {
-  dialogProvider.open('confirm', {})
+  dialogProvider.open('confirm', {
+    title: 'Do you really want to delete this?',
+  })
 }
 </script>
 
