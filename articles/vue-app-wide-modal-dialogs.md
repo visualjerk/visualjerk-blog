@@ -1,14 +1,19 @@
+---
+mermaidTheme: forest
+title: A more complex example
+---
+
 # App Wide (Modal) Dialogs with Vue
 
 Vue gives developers a lot of power and flexibility to create reusable components and logic. This is part of the reason developers ♥️ Vue, but sometimes leads to hard decisions on which pattern to choose for a certain use case. In this article I'll shed some light on a use case that took us a bit of time to get right:
 
-**Modal dialogs that are shared accross the whole application** (e.g. Confirmation Dialogs)
+**Modal dialogs that are shared accross the whole application** (e.g. confirmation dialogs)
 
 ## Short On Time?
 
-> Steal with pride, everything you need from the [Stackblitz Example](#)
+> Steal with pride from the [Stackblitz Example](#)
 
-## Minimum Requirements
+## 📝 Minimum Requirements
 
 Before diving into the details, lets take a look at what we want to achieve.
 
@@ -19,7 +24,7 @@ The modal dialog
 3. is able to provide feedback to the place where it was triggered
 4. is rendered only once even if used in multiple places
 
-## Developer Experience
+## 💎 Developer Experience
 
 In addition to the minimum requirements we would also like to get a great DX with
 
@@ -60,12 +65,54 @@ async function doDelete() {
 }
 
 function handleDelete() {
-  dialogs.trigger('confirm', {
+  dialogs.show('confirm', {
     title: `Do you really want to delete ${props.name}?`,
     onConfirm: () => doDelete(),
   })
 }
 </script>
+```
+
+Upon closer look we can derive a new distinct pieces this api consists of:
+
+```ts
+dialogs.show('confirm', { // dialog kind
+  // context
+  title: `Do you really want to delete ${props.name}?`,
+  // feedback
+  onConfirm: () => doDelete(),
+})
+```
+
+With this api, we can already check #1 to #3 of our minimum requirements.
+
+## Planning the Architecture
+
+Next let's create a proper architecture, which supports #4 of our minimum requirements. In order to only render a single dialog instance we ended up with something like this:
+
+```mermaid
+flowchart TB
+  V[View] <--> P[DialogProvider] <--> C[DialogComponent]
+  C -- renders --> D1[DialogFoo]
+  C -- renders --> D2[DialogBar]
+  C -- renders --> D3[DialogBaz]
+```
+
+## Creating the Dialog Component
+
+## Creating the Dialog API
+
+## Improving Developer Experience with Typesafety
+
+TBD: Typesafety
+
+```mermaid
+flowchart TB
+  V[View] <--> P[DialogProvider]
+  C[DialogComponent] <--> P
+  P -- registers --> D1[DialogFoo]
+  P -- registers --> D2[DialogBar]
+  P -- registers --> D3[DialogBaz]
 ```
 
 ## Further Reading
