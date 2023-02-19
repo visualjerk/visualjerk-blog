@@ -65,7 +65,7 @@ async function doDelete() {
 }
 
 function handleDelete() {
-  dialogs.show('confirm', {
+  dialogs.open('confirm', {
     title: `Do you really want to delete ${props.name}?`,
     onConfirm: () => doDelete(),
   })
@@ -76,7 +76,7 @@ function handleDelete() {
 Upon closer look we can derive a new distinct pieces this api consists of:
 
 ```ts
-dialogs.show('confirm', { // dialog kind
+dialogs.open('confirm', { // dialog kind
   // context
   title: `Do you really want to delete ${props.name}?`,
   // feedback
@@ -92,7 +92,7 @@ Next let's create a proper architecture, which supports #4 of our minimum requir
 
 ```mermaid
 flowchart TB
-  V(View) <--> P{{DialogProvider}} <--> C(DialogComponent)
+  V(View) <--> P{{DialogProvider}} <--> C(DialogWrapper)
   C -- renders --> D1(DialogFoo)
   C -- renders --> D2(DialogBar)
   C -- renders --> D3(DialogBaz)
@@ -100,25 +100,55 @@ flowchart TB
 
 ## Creating the Dialog Provider
 
-Based on the above architecture, our **dialog provider** is hardly more than a subscription service for dialogs. For the sake of breavity, we use `EventTarget` to implement it:
+Based on the above architecture, our `dialogProvider` is hardly more than a subscription service for dialogs. For the sake of breavity, we use `EventTarget` to implement it:
 
 ::: code-group
 
 ```ts [dialogs/dialog-provider.ts]
 const DIALOG_OPEN_EVENT = 'DIALOG_OPEN_EVENT'
+const eventBus = new EventTarget()
 
-class DialogProvider extends EventTarget {
+export type DialogEventPayload = {
+  kind: string
+  context: Record<string, unknown>
+}
+
+export const dialogProvider = {
   open(kind: string, context: Record<string, unknown>) {
-    this.dispatchEvent(new CustomEvent(DIALOG_OPEN_EVENT, {
-      details: context
-    }))
-  }
+    eventBus.dispatchEvent(
+      new CustomEvent<DialogEventPayload>(DIALOG_OPEN_EVENT, {
+        detail: {
+          kind,
+          context,
+        },
+      })
+    )
+  },
+  subscribe(handler: (payload: DialogEventPayload) => void) {
+    function handleEvent(event: CustomEvent<DialogEventPayload>) {
+      handler(event.detail)
+    }
+
+    eventBus.addEventListener(DIALOG_OPEN_EVENT, handleEvent as EventListener)
+    return () =>
+      eventBus.removeEventListener(
+        DIALOG_OPEN_EVENT,
+        handleEvent as EventListener
+      )
+  },
 }
 ```
 
+On the surface the `dialogProvider` provides two methods:
+
+- `open` this will be used inside our views to open a new dialog
+- `subscribe` this will be used inside our `DialogWrapper` to get notified about opening a new dialog
+
 :::
 
-## Creating the Dialog Component
+## Creating the Dialog Wrapper
+
+## Adding Dialog Components
 
 ## Improving Developer Experience with Typesafety
 
@@ -127,7 +157,7 @@ TBD: Typesafety
 ```mermaid
 flowchart TB
   V(View) <--> P{{DialogProvider}}
-  C(DialogComponent) <--> P
+  C(DialogWrapper) <--> P
   P -- registers --> D1(DialogFoo)
   P -- registers --> D2(DialogBar)
   P -- registers --> D3(DialogBaz)
