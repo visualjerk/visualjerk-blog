@@ -1,31 +1,35 @@
 <template>
-  <div class="overlay">
-    <div class="dialog">
-      <h2><slot name="title" /></h2>
-      <div><slot /></div>
-      <div class="actions">
-        <slot name="actions" />
-      </div>
+  <dialog ref="dialogEl" @close="$emit('close')">
+    <h2><slot name="title" /></h2>
+    <div><slot /></div>
+    <div class="actions">
+      <slot name="actions" />
     </div>
-  </div>
+  </dialog>
 </template>
 
-<style scoped>
-.overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+<script setup lang="ts">
+import { ref, onMounted, unref } from 'vue'
 
-.dialog {
+defineEmits(['close'])
+
+const dialogEl = ref()
+onMounted(() => {
+  unref(dialogEl).showModal()
+})
+</script>
+
+<style scoped>
+dialog {
   max-width: 30rem;
   width: 100%;
   background-color: white;
   border-radius: 0.5rem;
   padding: 2rem;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .actions {

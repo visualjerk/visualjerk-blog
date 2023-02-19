@@ -1,5 +1,5 @@
 <template>
-  <AppDialog>
+  <AppDialog @close="handleCancel">
     <template #title>
       {{ title }}
     </template>

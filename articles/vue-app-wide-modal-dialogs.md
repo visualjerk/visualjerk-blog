@@ -205,17 +205,13 @@ Our next step is to add an actual dialog component. Let's stick with the example
 
 ```vue [dialogs/components/confirm-dialog.vue]
 <template>
-  <AppDialog>
+  <AppDialog @close="handleCancel">
     <template #title>
       {{ title }}
     </template>
     <template #actions>
-      <AppButton @click="handleCancel">
-        Cancel
-      </AppButton>
-      <AppButton @click="handleConfirm" variant="primary">
-        Confirm
-      </AppButton>
+      <AppButton @click="handleCancel">Cancel</AppButton>
+      <AppButton @click="handleConfirm" variant="primary">Confirm</AppButton>
     </template>
   </AppDialog>
 </template>
@@ -240,6 +236,7 @@ function handleConfirm() {
   emit('close')
 }
 </script>
+
 ```
 
 :::
