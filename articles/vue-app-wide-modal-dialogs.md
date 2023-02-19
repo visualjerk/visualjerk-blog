@@ -1,6 +1,6 @@
 ---
 mermaidTheme: forest
-title: A more complex example
+title: App Wide (Modal) Dialogs with Vue
 ---
 
 # App Wide (Modal) Dialogs with Vue
@@ -92,10 +92,10 @@ Next let's create a proper architecture, which supports #4 of our minimum requir
 
 ```mermaid
 flowchart TB
-  V[View] <--> P[DialogProvider] <--> C[DialogComponent]
-  C -- renders --> D1[DialogFoo]
-  C -- renders --> D2[DialogBar]
-  C -- renders --> D3[DialogBaz]
+  V(View) <--> P{{DialogProvider}} <--> C(DialogComponent)
+  C -- renders --> D1(DialogFoo)
+  C -- renders --> D2(DialogBar)
+  C -- renders --> D3(DialogBaz)
 ```
 
 ## Creating the Dialog Component
@@ -108,11 +108,11 @@ TBD: Typesafety
 
 ```mermaid
 flowchart TB
-  V[View] <--> P[DialogProvider]
-  C[DialogComponent] <--> P
-  P -- registers --> D1[DialogFoo]
-  P -- registers --> D2[DialogBar]
-  P -- registers --> D3[DialogBaz]
+  V(View) <--> P{{DialogProvider}}
+  C(DialogComponent) <--> P
+  P -- registers --> D1(DialogFoo)
+  P -- registers --> D2(DialogBar)
+  P -- registers --> D3(DialogBaz)
 ```
 
 ## Further Reading
