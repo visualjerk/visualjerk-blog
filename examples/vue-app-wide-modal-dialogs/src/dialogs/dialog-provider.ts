@@ -1,13 +1,21 @@
+import type { ComponentProps } from '../types'
+import type { DIALOG_COMPONENTS } from './components'
+
+type DialogKind = keyof typeof DIALOG_COMPONENTS
+type DialogContext<TKind extends DialogKind> = ComponentProps<
+  typeof DIALOG_COMPONENTS[TKind]
+>
+
+export type DialogEventPayload<TKind extends DialogKind = DialogKind> = {
+  kind: DialogKind
+  context: DialogContext<TKind>
+}
+
 const DIALOG_OPEN_EVENT = 'DIALOG_OPEN_EVENT'
 const eventBus = new EventTarget()
 
-export type DialogEventPayload = {
-  kind: string
-  context: Record<string, unknown>
-}
-
 export const dialogProvider = {
-  open(kind: string, context: Record<string, unknown>) {
+  open<TKind extends DialogKind>(kind: TKind, context: DialogContext<TKind>) {
     eventBus.dispatchEvent(
       new CustomEvent<DialogEventPayload>(DIALOG_OPEN_EVENT, {
         detail: {
