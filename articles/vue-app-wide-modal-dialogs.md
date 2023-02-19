@@ -26,7 +26,7 @@ The modal dialog
 
 ## 💎 Developer Experience
 
-In addition to the minimum requirements we would also like to get a great DX with
+In addition to the minimum requirements we would also like to get a great DX by
 
 1. providing a simple api
 2. offering type safety for a dialog's accepted context and feedback
@@ -197,7 +197,77 @@ This component is pretty straightforward. It utilizes Vue's `component` to rende
 
 Note that we import a record of `DIALOG_COMPONENTS`, which is an empty object for now. This is the place where we will add the actual dialog components.
 
-## Adding Dialog Components
+## Adding a Dialog Component
+
+Our next step is to add an actual dialog component. Let's stick with the example from above and create a `ConfirmDialog`:
+
+::: code-group
+
+```vue [dialogs/components/confirm-dialog.vue]
+<template>
+  <AppDialog>
+    <template #title>
+      {{ title }}
+    </template>
+    <template #actions>
+      <AppButton @click="handleCancel">
+        Cancel
+      </AppButton>
+      <AppButton @click="handleConfirm" variant="primary">
+        Confirm
+      </AppButton>
+    </template>
+  </AppDialog>
+</template>
+
+<script setup lang="ts">
+import AppDialog from '../../components/app-dialog.vue'
+import AppButton from '../../components/app-button.vue'
+
+defineProps<{
+  title: string
+}>()
+
+const emit = defineEmits(['close', 'cancel', 'confirm'])
+
+function handleCancel() {
+  emit('cancel')
+  emit('close')
+}
+
+function handleConfirm() {
+  emit('confirm')
+  emit('close')
+}
+</script>
+```
+
+:::
+
+The one thing that all dialog components need to implement is a `close` event. This is used by the `DialogWrapper` to close the dialog and reset its bindings.
+
+In addition this specific dialog emits a `cancel` and `confirm` event. It also requires a `title` prop. All of these can be provided by the context of a `DialogEvent` and are bound by the `DialogWrapper`.
+
+## Register the Confirm Dialog
+
+Now we can add the `ConfirmDialog` to our `DIALOG_COMPONENTS` to let the `DialogWrapper` know about its existence:
+
+::: code-group
+
+```ts [dialogs/components/index.ts]
+import type { Component } from 'vue'
+import { defineAsyncComponent } from 'vue'
+
+export const DIALOG_COMPONENTS: Record<string, Component> = {
+  confirm: defineAsyncComponent(() => import('./confirm-dialog.vue')),
+}
+```
+
+:::
+
+Note that we use `defineAsyncComponent` to enable code splitting and ensure a dialog is only loaded when needed. This is considered best practice, as some dialogs might not be needed at all during a user session.
+
+## Using Dialogs in a View
 
 ## Improving Developer Experience with Typesafety
 

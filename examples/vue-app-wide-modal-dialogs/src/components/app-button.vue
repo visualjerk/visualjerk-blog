@@ -7,7 +7,7 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    variant?: 'base' | 'danger'
+    variant?: 'base' | 'primary' | 'danger'
   }>(),
   {
     variant: 'base',
@@ -23,7 +23,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: darkslategray;
+  background-color: gray;
   color: white;
   cursor: pointer;
   transition: border-color 0.25s;
@@ -34,6 +34,11 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.app-button--primary {
+  background-color: blue;
+  color: white;
 }
 
 .app-button--danger {

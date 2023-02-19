@@ -3,8 +3,10 @@
     <template #title>
       {{ title }}
     </template>
-    <AppButton @click="handleCancel">Cancel</AppButton>
-    <AppButton @click="handleConfirm">Confirm</AppButton>
+    <template #actions>
+      <AppButton @click="handleCancel">Cancel</AppButton>
+      <AppButton @click="handleConfirm" variant="primary">Confirm</AppButton>
+    </template>
   </AppDialog>
 </template>
 
