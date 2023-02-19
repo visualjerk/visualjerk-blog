@@ -25,7 +25,7 @@ dialog {
   width: 100%;
   background-color: white;
   border-radius: 0.5rem;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 dialog::backdrop {
@@ -33,8 +33,8 @@ dialog::backdrop {
 }
 
 .actions {
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
   gap: 1rem;
-  justify-content: center;
 }
 </style>
