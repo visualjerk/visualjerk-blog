@@ -1,17 +1,27 @@
 <script setup lang="ts">
-import AppButton from './components/app-button.vue'
+import { ref } from 'vue'
 import { DialogWrapper, dialogProvider } from './dialogs'
+import AppButton from './components/app-button.vue'
 
-function handleDelete() {
+const confirmed = ref(false)
+
+function handleSeriousAction() {
   dialogProvider.open('confirm', {
     title: 'Do you really want to delete this?',
+    onConfirm: () => {
+      confirmed.value = true
+    },
+    onCancel: () => {
+      confirmed.value = false
+    },
   })
 }
 </script>
 
 <template>
   <div>
-    <AppButton @click="handleDelete" variant="danger">
+    <h2>{{ confirmed ? 'Action Confirmed' : 'Unconfirmed' }}</h2>
+    <AppButton @click="handleSeriousAction" variant="danger">
       Do Something Serious
     </AppButton>
   </div>

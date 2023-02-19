@@ -11,7 +11,7 @@ Vue gives developers a lot of power and flexibility to create reusable component
 
 ## Short On Time?
 
-> Steal with pride from the [Stackblitz Example](#)
+> Steal with pride from the examples folder
 
 ## 📝 Minimum Requirements
 
@@ -20,16 +20,16 @@ Before diving into the details, lets take a look at what we want to achieve.
 The modal dialog
 
 1. can be triggered from multiple places
-2. is able to receive context specific variables
-3. is able to provide feedback to the place where it was triggered
-4. is rendered only once even if used in multiple places
+2. is able to receive props
+3. is able to provide events
+4. is rendered only once when used in multiple places
 
 ## 💎 Developer Experience
 
 In addition to the minimum requirements we would also like to get a great DX by
 
 1. providing a simple api
-2. offering type safety for a dialog's accepted context and feedback
+2. offering type safety for a dialog's accepted props and events
 
 ## Defining the API
 
@@ -73,13 +73,13 @@ function handleDelete() {
 </script>
 ```
 
-Upon closer look we can derive a new distinct pieces this api consists of:
+Upon closer look we can derive a few distinct pieces this api consists of:
 
 ```ts
 dialogs.open('confirm', { // dialog kind
-  // context
+  // props
   title: `Do you really want to delete ${props.name}?`,
-  // feedback
+  // events
   onConfirm: () => doDelete(),
 })
 ```
@@ -266,7 +266,49 @@ Note that we use `defineAsyncComponent` to enable code splitting and ensure a di
 
 ## Using Dialogs in a View
 
-## Improving Developer Experience with Typesafety
+With all the hard work finished, we can finally reap the rewards and use a dialog inside our view.
+
+::: code-group
+
+```ts [App.vue]
+<script setup lang="ts">
+import { ref } from 'vue'
+import { DialogWrapper, dialogProvider } from './dialogs'
+import AppButton from './components/app-button.vue'
+
+const confirmed = ref(false)
+
+function handleSeriousAction() {
+  dialogProvider.open('confirm', {
+    title: 'Do you really want to delete this?',
+    onConfirm: () => {
+      confirmed.value = true
+    },
+    onCancel: () => {
+      confirmed.value = false
+    },
+  })
+}
+</script>
+
+<template>
+  <div>
+    <h2>{{ confirmed ? 'Action Confirmed' : 'Unconfirmed' }}</h2>
+    <AppButton @click="handleSeriousAction" variant="danger">
+      Do Something Serious
+    </AppButton>
+  </div>
+  <DialogWrapper />
+</template>
+```
+
+:::
+
+While the `DialogWrapper` should be kept on root level, the `dialogProvider` can be used wherever we please. Adding new kinds of dialogs is a breeze, as it just requires creating a simple dialog component and adding it in `DIALOG_COMPONENTS`.
+
+But there is one last beast to slay.
+
+## Improving Developer Experience with Type Safety
 
 TBD: Typesafety
 
@@ -278,8 +320,6 @@ flowchart TB
   P -- registers --> D2(DialogBar)
   P -- registers --> D3(DialogBaz)
 ```
-
-## Handling Errors
 
 ## Further Reading
 
