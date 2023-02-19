@@ -1,0 +1,18 @@
+{
+  "name": "visualjerk-blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vitepress dev articles",
+    "build": "vitepress build articles",
+    "preview": "vitepress preview articles"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vitepress": "1.0.0-alpha.46",
+    "vue": "^3.2.47"
+  }
+}
