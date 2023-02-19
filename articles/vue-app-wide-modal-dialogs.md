@@ -310,16 +310,68 @@ But there is one last beast to slay.
 
 ## Improving Developer Experience with Type Safety
 
-TBD: Typesafety
+By making our `open` method generic, we can add type safety and intellisense to it:
 
-```mermaid
-flowchart TB
-  V(View) <--> P{{DialogProvider}}
-  C(DialogWrapper) <--> P
-  P -- registers --> D1(DialogFoo)
-  P -- registers --> D2(DialogBar)
-  P -- registers --> D3(DialogBaz)
+::: code-group
+
+```ts [dialogs/confirm-provider.ts]
+import type { ComponentProps } from '../types'
+import type { DIALOG_COMPONENTS } from './components'
+
+type DialogKind = keyof typeof DIALOG_COMPONENTS
+type DialogContext<TKind extends DialogKind> = Omit<
+  ComponentProps<typeof DIALOG_COMPONENTS[TKind]>,
+  'onClose'
+>
+
+export type DialogEventPayload<TKind extends DialogKind = DialogKind> = {
+  kind: DialogKind
+  context: DialogContext<TKind>
+}
+
+const DIALOG_OPEN_EVENT = 'DIALOG_OPEN_EVENT'
+const eventBus = new EventTarget()
+
+export const dialogProvider = {
+  open<TKind extends DialogKind>(kind: TKind, context: DialogContext<TKind>) {
+    eventBus.dispatchEvent(
+      new CustomEvent<DialogEventPayload>(DIALOG_OPEN_EVENT, {
+        detail: {
+          kind,
+          context,
+        },
+      })
+    )
+  },
+  subscribe(handler: (payload: DialogEventPayload) => void) {
+    function handleEvent(event: CustomEvent<DialogEventPayload>) {
+      handler(event.detail)
+    }
+
+    eventBus.addEventListener(DIALOG_OPEN_EVENT, handleEvent as EventListener)
+    return () =>
+      eventBus.removeEventListener(
+        DIALOG_OPEN_EVENT,
+        handleEvent as EventListener
+      )
+  },
+}
 ```
+
+```ts [types.d.ts]
+import type { AllowedComponentProps, Component, VNodeProps } from 'vue'
+
+export type ComponentProps<C extends Component> = C extends new (
+  ...args: any
+) => any
+  ? Omit<
+      InstanceType<C>['$props'],
+      keyof VNodeProps | keyof AllowedComponentProps
+    >
+  : never
+```
+
+:::
 
 ## Further Reading
 

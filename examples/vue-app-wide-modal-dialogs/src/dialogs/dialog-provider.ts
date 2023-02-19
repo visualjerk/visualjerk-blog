@@ -2,8 +2,9 @@ import type { ComponentProps } from '../types'
 import type { DIALOG_COMPONENTS } from './components'
 
 type DialogKind = keyof typeof DIALOG_COMPONENTS
-type DialogContext<TKind extends DialogKind> = ComponentProps<
-  typeof DIALOG_COMPONENTS[TKind]
+type DialogContext<TKind extends DialogKind> = Omit<
+  ComponentProps<typeof DIALOG_COMPONENTS[TKind]>,
+  'onClose'
 >
 
 export type DialogEventPayload<TKind extends DialogKind = DialogKind> = {
