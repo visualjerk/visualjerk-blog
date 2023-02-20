@@ -5,7 +5,7 @@ import { articles } from './articles'
 export default withMermaid(
   defineConfig({
     title: 'Visualjerk Blog',
-    base: '/visualjerk/visualjerk-blog',
+    base: '/visualjerk-blog',
     lastUpdated: true,
     themeConfig: {
       sidebar: [
