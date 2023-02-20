@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 16
           cache: npm
-      - run: npm ci
+      - run: npm run build
       - name: Build
         run: npm run build
       - uses: actions/configure-pages@v2
