@@ -19,6 +19,7 @@
   ],
   "devDependencies": {
     "@algolia/client-search": "4.14.3",
+    "@giscus/vue": "^2.2.6",
     "@mermaid-js/mermaid-mindmap": "9.3.0",
     "@types/node": "18.14.0",
     "lodash": "4.17.21",
