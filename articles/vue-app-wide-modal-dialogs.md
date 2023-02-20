@@ -11,7 +11,7 @@ Vue gives developers a lot of power and flexibility to create reusable component
 
 ## Short On Time?
 
-> Steal with pride from the examples folder
+> Steal with pride from the [examples folder](https://github.com/visualjerk/visualjerk-blog/tree/main/examples/vue-app-wide-modal-dialogs)
 
 ## 📝 Minimum Requirements
 
