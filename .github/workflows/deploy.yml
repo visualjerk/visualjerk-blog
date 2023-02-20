@@ -23,14 +23,13 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 6.0.2
-
       - run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm build
       - uses: actions/configure-pages@v2
       - uses: actions/upload-pages-artifact@v1
         with:
-          path: .vitepress/dist
+          path: ./.vitepress/dist
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v1
