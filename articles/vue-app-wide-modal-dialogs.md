@@ -1,17 +1,12 @@
----
-mermaidTheme: forest
-title: App Wide (Modal) Dialogs with Vue
----
-
 # App Wide (Modal) Dialogs with Vue
 
-Vue gives developers a lot of power and flexibility to create reusable components and logic. This is part of the reason developers ♥️ Vue, but sometimes leads to hard decisions on which pattern to choose for a certain use case. In this article I'll shed some light on a use case that took us a bit of time to get right:
+Vue gives developers a lot of power and flexibility to create reusable components and logic. This is part of the reason developers ❤️ Vue, but sometimes leads to hard decisions on which pattern to choose for a certain use case. In this article I'll shed some light on a use case that took us a bit of time to get right:
 
 **Modal dialogs that are shared accross the whole application** (e.g. confirmation dialogs)
 
-## Short On Time?
+## ⏱ Short On Time?
 
-> Steal with pride from the [examples folder](https://github.com/visualjerk/visualjerk-blog/tree/main/examples/vue-app-wide-modal-dialogs)
+> Steal with pride from the [example app](https://github.com/visualjerk/visualjerk-blog/tree/main/examples/vue-app-wide-modal-dialogs)
 
 ## 📝 Minimum Requirements
 
@@ -31,7 +26,7 @@ In addition to the minimum requirements we would also like to get a great DX by
 1. providing a simple api
 2. offering type safety for a dialog's accepted props and events
 
-## Defining the API
+## 📟 Defining the API
 
 Usually a good way to start building a new component is by thinking about how you want to use it. Let's look at a concrete example. Before a user deletes an entity, she is asked to confirm this action.
 
@@ -86,7 +81,7 @@ dialogs.open('confirm', { // dialog kind
 
 With this api, we can already check #1 to #3 of our minimum requirements.
 
-## Planning the Architecture
+## 🪜 Planning the Architecture
 
 Next let's create a proper architecture, which supports #4 of our minimum requirements. In order to only render a single dialog instance we ended up with something like this:
 
@@ -98,7 +93,7 @@ flowchart TB
   C -- renders --> D3(DialogBaz)
 ```
 
-## Creating the Dialog Provider
+## 🧱 Creating the Dialog Provider
 
 Based on the above architecture, our `dialogProvider` is hardly more than a subscription service for dialogs. For the sake of breavity, we use `EventTarget` to implement it:
 
@@ -146,7 +141,7 @@ On the surface the `dialogProvider` provides two methods:
 - `open` this will be used inside our views to open a new dialog
 - `subscribe` this will be used inside our `DialogWrapper` to get notified about opening a new dialog
 
-## Creating the Dialog Wrapper
+## 🧱 Creating the Dialog Wrapper
 
 Now we create the `DialogWrapper` which is responsible for rendering dialogs, whenever it gets notified by the `dialogProvider`.
 
@@ -197,7 +192,7 @@ This component is pretty straightforward. It utilizes Vue's `component` to rende
 
 Note that we import a record of `DIALOG_COMPONENTS`, which is an empty object for now. This is the place where we will add the actual dialog components.
 
-## Adding a Dialog Component
+## 🧱 Adding a Dialog Component
 
 Our next step is to add an actual dialog component. Let's stick with the example from above and create a `ConfirmDialog`:
 
@@ -245,7 +240,7 @@ The one thing that all dialog components need to implement is a `close` event. T
 
 In addition this specific dialog emits a `cancel` and `confirm` event. It also requires a `title` prop. All of these can be provided by the context of a `DialogEvent` and are bound by the `DialogWrapper`.
 
-## Register the Confirm Dialog
+## 🧱 Register the Confirm Dialog
 
 Now we can add the `ConfirmDialog` to our `DIALOG_COMPONENTS` to let the `DialogWrapper` know about its existence:
 
@@ -264,9 +259,9 @@ export const DIALOG_COMPONENTS: Record<string, Component> = {
 
 Note that we use `defineAsyncComponent` to enable code splitting and ensure a dialog is only loaded when needed. This is considered best practice, as some dialogs might not be needed at all during a user session.
 
-## Using Dialogs in a View
+## 🧱 Using Dialogs in a View
 
-With all the hard work finished, we can finally reap the rewards and use a dialog inside our view.
+With all the hard work done, we can finally reap the rewards and use a dialog inside our view (in this simple example just the `App.vue`).
 
 ::: code-group
 
@@ -304,11 +299,11 @@ function handleSeriousAction() {
 
 :::
 
-While the `DialogWrapper` should be kept on root level, the `dialogProvider` can be used wherever we please. Adding new kinds of dialogs is a breeze, as it just requires creating a simple dialog component and adding it in `DIALOG_COMPONENTS`.
+While the `DialogWrapper` should be kept on root level, the `dialogProvider` can be used wherever we please. Adding new kinds of dialogs is a breeze, as it just requires creating a simple dialog component and adding it to `DIALOG_COMPONENTS`.
 
 But there is one last beast to slay.
 
-## Improving Developer Experience with Type Safety
+## 🔮 Improving Developer Experience with Type Safety
 
 By making our `open` method generic, we can add type safety and intellisense to it:
 
@@ -373,6 +368,16 @@ export type ComponentProps<C extends Component> = C extends new (
 
 :::
 
-## Further Reading
+The important part here is the generic `DialogContext` type. It takes a `DialogKind`, which is the key of our `DIALOG_COMPONENTS` record. It then gets the props of the component that is stored under this key and omits `onClose`, as this method should only be used inside of `DialogWrapper`.
+
+Now TypeScript will yell at us, if we miss a required prop. In addition we get intellisense for a dialog's context:
+
+![Context Intellisense](./assets/vue-app-wide-modal-dialog-context-intellisense.gif)
+
+And that's it. We have created a solid foundation for dialogs that can be used application wide.
+
+I hope you enjoyed it and would love to read your thoughts about this approach. Also I am always curious to see other solutions. Feel free to leave a comment.
+
+## 📖 Further Reading
 
 - [Modal & Nonmodal Dialogs: When (& When Not) to Use Them](https://www.nngroup.com/articles/modal-nonmodal-dialog/)
