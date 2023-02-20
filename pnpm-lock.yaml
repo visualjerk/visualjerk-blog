@@ -3,6 +3,9 @@ lockfileVersion: 5.4
 specifiers:
   '@algolia/client-search': 4.14.3
   '@mermaid-js/mermaid-mindmap': 9.3.0
+  '@types/node': ^18.14.0
+  lodash: ^4.17.21
+  lodash-es: ^4.17.21
   mermaid: 9.1.7
   vitepress: 1.0.0-alpha.46
   vitepress-plugin-mermaid: 2.0.10
@@ -11,8 +14,11 @@ specifiers:
 devDependencies:
   '@algolia/client-search': 4.14.3
   '@mermaid-js/mermaid-mindmap': 9.3.0
+  '@types/node': 18.14.0
+  lodash: 4.17.21
+  lodash-es: 4.17.21
   mermaid: 9.1.7
-  vitepress: 1.0.0-alpha.46_2r467mdhb7mblpaox4bg7fatdi
+  vitepress: 1.0.0-alpha.46_ualytggqouazutyh25b2kkzeye
   vitepress-plugin-mermaid: 2.0.10_fjtjbmckgrevkhn5hina2beyeq
   vue: 3.2.47
 
@@ -408,6 +414,10 @@ packages:
       non-layered-tidy-tree-layout: 2.0.2
     dev: true
 
+  /@types/node/18.14.0:
+    resolution: {integrity: sha512-5EWrvLmglK+imbCJY0+INViFWUHg1AHel1sq4ZVSfdcNqGy9Edv3UB9IIzzg+xPaUcAgZYcfVs2fBcwDeZzU0A==}
+    dev: true
+
   /@types/web-bluetooth/0.0.16:
     resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
     dev: true
@@ -419,7 +429,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.1.2
+      vite: 4.1.2_@types+node@18.14.0
       vue: 3.2.47
     dev: true
 
@@ -1208,6 +1218,10 @@ packages:
     resolution: {integrity: sha512-dp3s92+uNI1hWIpPGH3jK2kxE2lMjdXdr+DH8ynZHpd6PUlH6x6cbuXnoMmiNumznqaNO31xu9e79F0uuZ0JFg==}
     dev: true
 
+  /lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: true
+
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: true
@@ -1334,7 +1348,7 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /vite/4.1.2:
+  /vite/4.1.2_@types+node@18.14.0:
     resolution: {integrity: sha512-MWDb9Rfy3DI8omDQySbMK93nQqStwbsQWejXRY2EBzEWKmLAXWb1mkI9Yw2IJrc+oCvPCI1Os5xSSIBYY6DEAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -1359,6 +1373,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 18.14.0
       esbuild: 0.16.17
       postcss: 8.4.21
       resolve: 1.22.1
@@ -1374,10 +1389,10 @@ packages:
       vitepress: ^0.21.6 || ^1.0.0 || ^1.0.0-alpha
     dependencies:
       mermaid: 9.1.7
-      vitepress: 1.0.0-alpha.46_2r467mdhb7mblpaox4bg7fatdi
+      vitepress: 1.0.0-alpha.46_ualytggqouazutyh25b2kkzeye
     dev: true
 
-  /vitepress/1.0.0-alpha.46_2r467mdhb7mblpaox4bg7fatdi:
+  /vitepress/1.0.0-alpha.46_ualytggqouazutyh25b2kkzeye:
     resolution: {integrity: sha512-HiKiHzC0iTPsRsKs8XcsMeMzCpcCt5LWcX9mpDr288Ju+nQf1G8A2+Wm44ZkBsVv4EHxFK4ChmWyZrL1OJUXpg==}
     hasBin: true
     dependencies:
@@ -1388,7 +1403,7 @@ packages:
       '@vueuse/core': 9.13.0_vue@3.2.47
       body-scroll-lock: 4.0.0-beta.0
       shiki: 0.14.1
-      vite: 4.1.2
+      vite: 4.1.2_@types+node@18.14.0
       vue: 3.2.47
     transitivePeerDependencies:
       - '@algolia/client-search'

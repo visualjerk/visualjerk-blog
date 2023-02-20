@@ -3,9 +3,9 @@
   "description": "Writing about frontend development with a focus on Vue and DX.",
   "author": "Jörg Bayreuther",
   "scripts": {
-    "dev": "vitepress dev articles",
-    "build": "vitepress build articles",
-    "preview": "vitepress preview articles"
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
   },
   "keywords": [
     "vue",
@@ -20,6 +20,8 @@
   "devDependencies": {
     "@algolia/client-search": "4.14.3",
     "@mermaid-js/mermaid-mindmap": "9.3.0",
+    "@types/node": "18.14.0",
+    "lodash": "4.17.21",
     "mermaid": "9.1.7",
     "vitepress": "1.0.0-alpha.46",
     "vitepress-plugin-mermaid": "2.0.10",
