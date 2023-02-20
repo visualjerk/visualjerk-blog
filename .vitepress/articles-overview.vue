@@ -6,8 +6,7 @@ import { unref } from 'vue'
 const { site } = useData()
 
 function addBaseToLink(link: string) {
-  const fullBase = `${window.location.origin}${unref(site.value).base}`
-  return new URL(link, fullBase).toString()
+  return `${unref(site.value).base}${link.replace('/', '')}`
 }
 </script>
 

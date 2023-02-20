@@ -1,5 +1,5 @@
 <script setup>
-import Overview from './.vitepress/overview.vue'
+import ArticlesOverview from './.vitepress/articles-overview.vue'
 </script>
 
 # Welcome
@@ -10,4 +10,4 @@ Topics are mainly based on **frontend development** with a focus on **Vue** and 
 
 ## Articles
 
-<Overview />
+<ArticlesOverview />
