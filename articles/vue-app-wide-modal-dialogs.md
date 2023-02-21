@@ -261,7 +261,7 @@ With all the hard work done, we can finally reap the rewards and use a dialog in
 
 ::: code-group
 
-```ts [App.vue]
+```vue [App.vue]
 <script setup lang="ts">
 import { ref } from 'vue'
 import { DialogWrapper, dialogProvider } from './dialogs'
