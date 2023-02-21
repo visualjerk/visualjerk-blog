@@ -86,7 +86,9 @@ flowchart TB
 
 The `View` calls the `dialogProvider`, which in turn notifies the `DialogWrapper`. The `DialogWrapper` itself is responsible for rendering a single dialog at a time.
 
-> Note, that in this case we use `View` as a substitute for any place that needs to use a dialog. So it can be an actual `RouterView`, another component or even a use hook.
+::: info
+Note, that in this case we use `View` as a substitute for any place that needs to use a dialog. So it can be an actual `RouterView`, another component or even a use hook.
+:::
 
 ## 🧱 Creating the Dialog Provider
 
