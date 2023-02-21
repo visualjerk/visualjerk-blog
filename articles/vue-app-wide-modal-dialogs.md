@@ -10,13 +10,13 @@ Vue gives developers a lot of power and flexibility to create reusable component
 
 ## 📝 Minimum Requirements
 
-Before diving into the details, lets take a look at what we want to achieve.
+Before diving into the details, let's take a look at what we want to achieve.
 
-The modal dialog
+A modal dialog
 
 1. can be triggered from multiple places
-2. is able to receive props
-3. is able to provide events
+2. can receive props
+3. can provide events
 4. is rendered only once when used in multiple places
 
 ## 💎 Developer Experience
@@ -28,9 +28,9 @@ In addition to the minimum requirements we would also like to get a great DX by
 
 ## 📟 Defining the API
 
-Usually a good way to start building a new component is by thinking about how you want to use it. Let's look at a concrete example. Before a user deletes an entity, she is asked to confirm this action.
+Usually a good way to start building a new component is by thinking about how you want to use it. For the purposes of that let's take a look at a concrete example. Before a user deletes an entity, she is asked to confirm this action.
 
-Without the confirmation our code might look like this:
+Without the confirmation part our code might look like this:
 
 ```vue
 <template>
@@ -59,27 +59,18 @@ async function doDelete() {
   router.push('/overview')
 }
 
-function handleDelete() {
-  dialogs.open('confirm', {
-    title: `Do you really want to delete ${props.name}?`,
-    onConfirm: () => doDelete(),
-  })
-}
+// ✅ provide a simple api
+// ✅ can be triggered from multiple places
+dialogs.open('confirm', {
+  // ✅ can receive props
+  title: `Do you really want to delete ${props.name}?`,
+  // ✅ can provide events
+  onConfirm: () => doDelete(),
+})
 </script>
 ```
 
-Upon closer look we can derive a few distinct pieces this api consists of:
-
-```ts
-dialogs.open('confirm', { // dialog kind
-  // props
-  title: `Do you really want to delete ${props.name}?`,
-  // events
-  onConfirm: () => doDelete(),
-})
-```
-
-With this api, we can already check #1 to #3 of our minimum requirements.
+This already fulfills #1 to #3 of our minimum requirements, as well as #1 of our DX wishes.
 
 ## 🪜 Planning the Architecture
 
@@ -87,11 +78,15 @@ Next let's create a proper architecture, which supports #4 of our minimum requir
 
 ```mermaid
 flowchart TB
-  V(View) <--> P{{DialogProvider}} <--> C(DialogWrapper)
+  V(View) -- calls --> P{{dialogProvider}} -- notifies --> C(DialogWrapper)
   C -- renders --> D1(DialogFoo)
   C -- renders --> D2(DialogBar)
   C -- renders --> D3(DialogBaz)
 ```
+
+The `View` calls the `dialogProvider`, which in turn notifies the `DialogWrapper`. The `DialogWrapper` itself is responsible for rendering a single dialog at a time.
+
+> Note, that in this case we use `View` as a substitute for any place that needs to use a dialog. So it can be an actual `RouterView`, another component or even a use hook.
 
 ## 🧱 Creating the Dialog Provider
 
@@ -136,10 +131,10 @@ export const dialogProvider = {
 
 :::
 
-On the surface the `dialogProvider` provides two methods:
+On the surface the `dialogProvider` offers two methods:
 
-- `open` this will be used inside our views to open a new dialog
-- `subscribe` this will be used inside our `DialogWrapper` to get notified about opening a new dialog
+- `open` will be used inside our views to open a new dialog
+- `subscribe` will be used inside the `DialogWrapper` to get notified about opening a new dialog
 
 ## 🧱 Creating the Dialog Wrapper
 
@@ -190,7 +185,7 @@ export const DIALOG_COMPONENTS: Record<string, Component> = {}
 
 This component is pretty straightforward. It utilizes Vue's `component` to render a dialog component of a certain `kind`. It also binds the provided context alongside an `onClose` handler to the dialog component.
 
-Note that we import a record of `DIALOG_COMPONENTS`, which is an empty object for now. This is the place where we will add the actual dialog components.
+Note that we import a record of `DIALOG_COMPONENTS`, which is an empty object for now. This is the place where we will register the actual dialog components.
 
 ## 🧱 Adding a Dialog Component
 
@@ -231,18 +226,17 @@ function handleConfirm() {
   emit('close')
 }
 </script>
-
 ```
 
 :::
 
 The one thing that all dialog components need to implement is a `close` event. This is used by the `DialogWrapper` to close the dialog and reset its bindings.
 
-In addition this specific dialog emits a `cancel` and `confirm` event. It also requires a `title` prop. All of these can be provided by the context of a `DialogEvent` and are bound by the `DialogWrapper`.
+In addition this specific dialog emits a `cancel` and `confirm` event. It also requires a `title` prop. All of these can be provided by the context of a `DialogEvent` and are bound to the component by the `DialogWrapper`.
 
 ## 🧱 Register the Confirm Dialog
 
-Now we can add the `ConfirmDialog` to our `DIALOG_COMPONENTS` to let the `DialogWrapper` know about its existence:
+Now we register the `ConfirmDialog` in our `DIALOG_COMPONENTS`, so the `DialogWrapper` knows about its existence:
 
 ::: code-group
 
@@ -257,7 +251,7 @@ export const DIALOG_COMPONENTS: Record<string, Component> = {
 
 :::
 
-Note that we use `defineAsyncComponent` to enable code splitting and ensure a dialog is only loaded when needed. This is considered best practice, as some dialogs might not be needed at all during a user session.
+Note that we use Vue's `defineAsyncComponent` to enable code splitting and ensure a dialog is only loaded on demand. This is considered best practice, as some dialogs might not be needed at all during a user session.
 
 ## 🧱 Using Dialogs in a View
 
@@ -374,10 +368,12 @@ Now TypeScript will yell at us, if we miss a required prop. In addition we get i
 
 ![Context Intellisense](./assets/vue-app-wide-modal-dialog-context-intellisense.gif)
 
-And that's it. We have created a solid foundation for dialogs that can be used application wide.
+And that's it. We have created a solid foundation for dialogs that can be used application wide. We have also ensured it is type safe and offers a straightforward way to extend.
 
-I hope you enjoyed it and would love to read your thoughts about this approach. Also I am always curious to see other solutions. Feel free to leave a comment.
+I hope you enjoyed this article and would love to read your thoughts about the approach. Also I am always curious to see other solutions. Feel free to leave a comment.
 
-## 📖 Further Reading
+❤️ Thanks for reading!
+
+## 📖 Recommended Articles
 
 - [Modal & Nonmodal Dialogs: When (& When Not) to Use Them](https://www.nngroup.com/articles/modal-nonmodal-dialog/)
