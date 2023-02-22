@@ -216,7 +216,11 @@ defineProps<{
   title: string
 }>()
 
-const emit = defineEmits(['close', 'cancel', 'confirm'])
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'cancel'): void
+  (e: 'confirm'): void
+}>()
 
 function handleCancel() {
   emit('cancel')
