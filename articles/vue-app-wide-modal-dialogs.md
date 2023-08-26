@@ -2,7 +2,7 @@
 
 Vue gives developers a lot of power and flexibility to create reusable components and logic. This is part of the reason developers ❤️ Vue, but sometimes leads to hard decisions on which pattern to choose for a certain use case. In this article I'll shed some light on a use case that took us a bit of time to get right:
 
-**Modal dialogs that are shared accross the whole application** (e.g. confirmation dialogs)
+**Modal dialogs that are shared across the whole application** (e.g. confirmation dialogs)
 
 ## ⏱ Short On Time?
 
@@ -309,7 +309,7 @@ By making our `open` method generic, we can add type safety and intellisense to 
 
 ::: code-group
 
-```ts [dialogs/confirm-provider.ts]
+```ts [dialogs/dialog-provider.ts]
 import type { ComponentProps } from '../types'
 import type { DIALOG_COMPONENTS } from './components'
 
